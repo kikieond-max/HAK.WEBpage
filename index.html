@@ -7,186 +7,325 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
     <style>
         :root {
-            --bg-main: #020617;
+            --bg-main: #0a0e27;
             --bg-side: #0f172a;
             --card-bg: rgba(30, 41, 59, 0.4);
-            --border: rgba(255, 255, 255, 0.08);
+            --border: rgba(129, 140, 248, 0.15);
             --accent: #818cf8;
+            --accent-light: #a5b4fc;
             --success: #10b981;
+            --success-light: #6ee7b7;
             --danger: #ef4444;
+            --warning: #f59e0b;
             --text-p: #f8fafc;
             --text-s: #94a3b8;
+            --text-xs: #64748b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        body { background: var(--bg-main); color: var(--text-p); font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
+        body { background: var(--bg-main); color: var(--text-p); font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow-x: hidden; }
 
-        /* [Logo & Branding] */
-        .logo-wrapper { display: flex; flex-direction: column; align-items: center; gap: 15px; text-decoration: none; }
-        .minimal-logo { width: 40px; height: 30px; position: relative; display: flex; justify-content: center; align-items: center; }
-        .minimal-logo::before, .minimal-logo::after { content: ''; position: absolute; width: 2px; height: 100%; background: #ffffff; border-radius: 2px; }
-        .minimal-logo::before { left: 0; transform: skewY(-20deg); }
-        .minimal-logo::after { right: 0; transform: skewY(20deg); }
-        .logo-spine { width: 2px; height: 70%; background: #ffffff; opacity: 0.4; }
-        .logo-text { font-size: 1.1rem; font-weight: 300; letter-spacing: 0.5em; text-indent: 0.5em; color: #ffffff; text-transform: uppercase; }
-
-        /* [Buttons] */
-        .btn-impact { background: #fff; border: none; color: #000; padding: 0 20px; height: 48px; border-radius: 14px; font-weight: 900; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-impact:hover { transform: translateY(-2px); background: var(--accent); color: #fff; }
-
-        .ico-search { width: 13px; height: 13px; border: 2.5px solid currentColor; border-radius: 50%; position: relative; transform: rotate(-45deg); }
-        .ico-search::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 2.5px; height: 5px; background: currentColor; }
-
-        /* [Layout - PC/Mobile Responsive] */
+        /* [Layout] */
         #main-view { display: flex; height: 100vh; opacity: 0; transition: 0.5s ease; flex-direction: row; }
-        
-        nav { 
-            width: 300px; background: var(--bg-side); border-right: 1px solid var(--border); 
-            display: flex; flex-direction: column; padding: 45px 24px; z-index: 1000;
-        }
+        nav { width: 280px; background: linear-gradient(180deg, var(--bg-side) 0%, rgba(15, 23, 42, 0.8) 100%); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 40px 20px; z-index: 1000; }
+        section.content { flex: 1; padding: 50px 60px; overflow-y: auto; background: radial-gradient(circle at top right, #1a1f3a 0%, var(--bg-main) 100%); }
+        .container { max-width: 900px; margin: 0 auto; }
 
-        section.content { flex: 1; padding: 50px 60px; overflow-y: auto; background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%); }
-        .container { max-width: 800px; margin: 0 auto; }
-
-        /* [Mobile Specific UI] */
         @media (max-width: 768px) {
             #main-view { flex-direction: column; }
-            nav { 
-                width: 100%; height: 75px; position: fixed; bottom: 0; left: 0; 
-                flex-direction: row; padding: 0; border-right: none; border-top: 1px solid var(--border);
-                background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
-            }
+            nav { width: 100%; height: 70px; position: fixed; bottom: 0; left: 0; flex-direction: row; padding: 0; border-right: none; border-top: 1px solid var(--border); background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); }
             nav .logo-wrapper, nav .btn-edit-config { display: none; }
-            .nav-item { flex: 1; margin-bottom: 0; border-radius: 0; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; padding: 0; }
+            .nav-item { flex: 1; margin: 0; border-radius: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; padding: 0; }
             .nav-item.active { background: transparent; color: var(--accent); }
-            section.content { padding: 30px 20px 100px 20px; height: 100vh; }
-            .status-bar { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-            .mini-card { padding: 12px 5px; }
-            .mini-card p { font-size: 0.95rem; }
-            #school-title { font-size: 1.8rem !important; }
-            .card { padding: 25px 20px; }
+            section.content { padding: 30px 20px 100px 20px; }
         }
 
-        /* [Common Components] */
-        .nav-item { padding: 16px 20px; border-radius: 14px; cursor: pointer; color: var(--text-s); font-weight: 700; margin-bottom: 8px; font-size: 0.95rem; text-align: center; }
-        .nav-item.active { background: var(--accent); color: #fff; }
-        .btn-edit-config { margin-top: auto; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: var(--accent); height: 45px; border-radius: 12px; font-size: 0.85rem; font-weight: 800; cursor: pointer; }
+        /* [Navigation] */
+        .nav-item { padding: 14px 16px; border-radius: 12px; cursor: pointer; color: var(--text-s); font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; text-align: center; transition: all 0.3s ease; border: 1px solid transparent; }
+        .nav-item:hover { background: rgba(129, 140, 248, 0.1); color: var(--accent-light); }
+        .nav-item.active { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: #fff; border: 1px solid var(--accent-light); box-shadow: 0 4px 15px rgba(129, 140, 248, 0.3); }
+        .btn-edit-config { margin-top: auto; background: linear-gradient(135deg, rgba(129, 140, 248, 0.1), rgba(129, 140, 248, 0.05)); border: 1.5px solid var(--accent); color: var(--accent); height: 44px; border-radius: 11px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+        .btn-edit-config:hover { background: linear-gradient(135deg, rgba(129, 140, 248, 0.2), rgba(129, 140, 248, 0.1)); box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2); }
 
-        .location-tag { font-size: 0.85rem; color: var(--accent); font-weight: 800; margin-bottom: 12px; text-align: center; display: block; }
-        .status-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
-        .mini-card { background: var(--card-bg); border: 1px solid var(--border); padding: 18px; border-radius: 20px; text-align: center; }
-        .mini-card h4 { font-size: 0.7rem; color: var(--text-s); margin-bottom: 5px; text-transform: uppercase; }
-        .mini-card p { font-size: 1.1rem; font-weight: 800; color: #fff; }
+        /* [Logo] */
+        .logo-wrapper { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 35px; }
+        .minimal-logo { width: 40px; height: 30px; position: relative; display: flex; justify-content: center; align-items: center; margin: 0 auto; }
+        .minimal-logo::before, .minimal-logo::after { content: ''; position: absolute; width: 2px; height: 100%; background: linear-gradient(180deg, var(--accent), var(--accent-light)); border-radius: 2px; }
+        .minimal-logo::before { left: 0; transform: skewY(-20deg); }
+        .minimal-logo::after { right: 0; transform: skewY(20deg); }
+        .logo-spine { width: 2px; height: 70%; background: var(--accent); opacity: 0.6; }
+        .logo-text { font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; text-align: center; }
 
-        .progress-container { background: rgba(255,255,255,0.05); height: 8px; border-radius: 10px; margin-bottom: 40px; border: 1px solid var(--border); overflow: hidden; }
-        #progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; transition: 0.5s; }
-
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 35px; margin-bottom: 25px; }
-        .plan-item { display: flex; align-items: center; padding: 15px 15px; background: rgba(255,255,255,0.02); border-radius: 14px; margin-bottom: 10px; border: 1.5px solid var(--border); }
-        .plan-item input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-color: var(--success); }
-        .plan-text { flex: 1; font-weight: 600; font-size: 1rem; border: none; background: transparent; color: #fff; outline: none; text-align: center; }
-        .plan-text.completed { color: var(--success); text-decoration: line-through; opacity: 0.4; }
-        .btn-del { background: transparent; border: none; color: var(--text-s); cursor: pointer; font-size: 0.85rem; font-weight: 600; padding: 5px 10px; }
-
-        .time-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 20px; border-radius: 16px; display: flex; align-items: center; gap: 18px; margin-bottom: 10px; }
-        .date-box { text-align: center; min-width: 55px; border-right: 1.5px solid var(--accent); padding-right: 18px; }
-
+        /* [Onboarding] */
         #onboard { position: fixed; inset: 0; background: var(--bg-main); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .setup-box { width: 100%; max-width: 440px; }
-        .h-group { display: flex; gap: 10px; align-items: stretch; }
-        input, select { background: #1e293b; border: 1.5px solid var(--border); padding: 15px; border-radius: 14px; color: #fff; font-size: 1rem; outline: none; width: 100%; }
+        .onboard-box { width: 100%; max-width: 400px; text-align: center; }
+        .search-row { display: flex; gap: 10px; width: 100%; margin-bottom: 12px; }
+        #sch-results { background: rgba(30, 41, 59, 0.6); border-radius: 14px; max-height: 250px; overflow-y: auto; border: 1px solid var(--border); text-align: left; margin-bottom: 20px; display: none; backdrop-filter: blur(10px); }
+        .sch-item { padding: 15px; border-bottom: 1px solid rgba(129, 140, 248, 0.1); cursor: pointer; transition: 0.2s; }
+        .sch-item:hover { background: rgba(129, 140, 248, 0.1); }
+        .sch-addr { font-size: 0.75rem; color: var(--text-xs); margin-top: 4px; }
 
-        #sch-results { display:none; background:var(--bg-side); margin-top:12px; border-radius:14px; max-height:220px; overflow-y:auto; border:1px solid var(--border); }
-        .sch-item { padding: 15px; cursor: pointer; border-bottom: 1px solid var(--border); }
+        /* [위치 표시] */
+        .location-bar { text-align: center; font-size: 0.85rem; color: var(--accent-light); font-weight: 600; margin-bottom: 20px; letter-spacing: 0.05em; min-height: 20px; text-transform: uppercase; }
 
-        #modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 3000; display: none; justify-content: center; align-items: center; }
-        .modal-card { background: var(--bg-side); border: 1px solid var(--border); padding: 30px; border-radius: 24px; text-align: center; width: 90%; max-width: 320px; }
+        /* [Status Mini Cards] */
+        .status-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 35px; }
+        .mini-card { 
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(30, 41, 59, 0.3)); 
+            border: 1.5px solid var(--border); 
+            padding: 26px 20px; 
+            border-radius: 16px; 
+            text-align: center; 
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        .mini-card:hover { border-color: var(--accent); background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.4)); }
+        .mini-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            border-radius: 16px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        .mini-card-content { position: relative; z-index: 1; }
+        .mini-card h4 { font-size: 0.7rem; color: var(--text-xs); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+        .mini-card p { font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 6px; text-align: center; }
+        .mini-card-status { font-size: 0.8rem; color: var(--accent-light); text-align: center; font-weight: 600; }
 
+        /* 온도 상태별 그라데이션 */
+        .mini-card.temp-very-cold { background: linear-gradient(135deg, rgba(6, 78, 186, 0.3), rgba(59, 130, 246, 0.1)); border-color: rgba(59, 130, 246, 0.3); }
+        .mini-card.temp-cold { background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 197, 253, 0.1)); border-color: rgba(59, 130, 246, 0.3); }
+        .mini-card.temp-cool { background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(110, 231, 183, 0.1)); border-color: rgba(34, 197, 94, 0.3); }
+        .mini-card.temp-warm { background: linear-gradient(135deg, rgba(251, 146, 60, 0.3), rgba(254, 215, 170, 0.1)); border-color: rgba(251, 146, 60, 0.3); }
+        .mini-card.temp-hot { background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(252, 165, 165, 0.1)); border-color: rgba(239, 68, 68, 0.3); }
+        .mini-card.temp-very-hot { background: linear-gradient(135deg, rgba(153, 27, 27, 0.3), rgba(239, 68, 68, 0.1)); border-color: rgba(239, 68, 68, 0.3); }
+
+        /* 습도 상태별 그라데이션 */
+        .mini-card.humi-very-dry { background: linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(249, 115, 22, 0.1)); border-color: rgba(217, 119, 6, 0.3); }
+        .mini-card.humi-dry { background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), rgba(253, 224, 71, 0.1)); border-color: rgba(249, 115, 22, 0.3); }
+        .mini-card.humi-normal { background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(110, 231, 183, 0.1)); border-color: rgba(34, 197, 94, 0.3); }
+        .mini-card.humi-wet { background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 197, 253, 0.1)); border-color: rgba(59, 130, 246, 0.3); }
+        .mini-card.humi-very-wet { background: linear-gradient(135deg, rgba(6, 78, 186, 0.3), rgba(59, 130, 246, 0.1)); border-color: rgba(6, 78, 186, 0.3); }
+
+        /* 미세먼지 상태별 그라데이션 */
+        .mini-card.dust-very-good { background: linear-gradient(135deg, rgba(5, 150, 105, 0.3), rgba(110, 231, 183, 0.1)); border-color: rgba(5, 150, 105, 0.3); }
+        .mini-card.dust-good { background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(110, 231, 183, 0.1)); border-color: rgba(34, 197, 94, 0.3); }
+        .mini-card.dust-normal { background: linear-gradient(135deg, rgba(234, 179, 8, 0.3), rgba(253, 224, 71, 0.1)); border-color: rgba(234, 179, 8, 0.3); }
+        .mini-card.dust-bad { background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(252, 165, 165, 0.1)); border-color: rgba(239, 68, 68, 0.3); }
+        .mini-card.dust-very-bad { background: linear-gradient(135deg, rgba(153, 27, 27, 0.3), rgba(239, 68, 68, 0.1)); border-color: rgba(239, 68, 68, 0.3); }
+
+        /* [Home Grid] */
+        .home-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .home-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(30, 41, 59, 0.2)); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px 24px; transition: all 0.3s; backdrop-filter: blur(10px); text-align: center; }
+        .home-card:hover { border-color: var(--accent); background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.3)); transform: translateY(-2px); }
+        .home-card h5 { font-size: 0.8rem; color: var(--text-xs); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .home-card-icon { font-size: 1.2rem; }
+        .home-card-value { font-size: 2rem; font-weight: 900; color: var(--accent-light); margin-bottom: 10px; text-align: center; }
+        .home-card-desc { font-size: 0.85rem; color: var(--text-s); line-height: 1.4; text-align: center; }
+
+        /* [Plans] */
+        .progress-wrapper { background: rgba(129, 140, 248, 0.1); height: 6px; border-radius: 20px; margin-bottom: 25px; overflow: hidden; border: 1px solid var(--border); }
+        #progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--success)); transition: 0.5s ease-out; border-radius: 20px; box-shadow: 0 0 10px rgba(129, 140, 248, 0.5); }
+        .plan-item { display: flex; align-items: flex-start; padding: 16px; background: rgba(30, 41, 59, 0.4); border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border); gap: 12px; transition: all 0.3s; }
+        .plan-item:hover { background: rgba(30, 41, 59, 0.6); border-color: var(--accent); }
+        .plan-text { flex: 1; font-weight: 600; font-size: 0.95rem; color: #fff; word-break: break-all; white-space: pre-wrap; line-height: 1.5; }
+        .plan-text.completed { color: var(--success); text-decoration: line-through; opacity: 0.6; }
+        .btn-del { background:none; border:none; color:var(--text-s); cursor:pointer; font-size: 1.1rem; transition: 0.2s; padding: 0 5px; flex-shrink: 0; }
+        .btn-del:hover { color: var(--danger); transform: scale(1.2); }
+        .plan-check { width:20px; height:20px; accent-color:var(--success); flex-shrink: 0; cursor: pointer; }
+        .plan-empty { text-align: center; padding: 60px 20px; color: var(--text-s); line-height: 1.6; font-size: 0.95rem; }
+
+        /* [Common] */
+        .card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(30, 41, 59, 0.2)); border: 1.5px solid var(--border); border-radius: 16px; padding: 30px; margin-bottom: 20px; backdrop-filter: blur(10px); }
+        .btn-impact { background: linear-gradient(135deg, var(--accent), var(--accent-light)); border: none; color: #fff; padding: 0 18px; height: 48px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(129, 140, 248, 0.3); }
+        .btn-impact:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(129, 140, 248, 0.5); }
+        input, select { background: rgba(30, 41, 59, 0.6); border: 1.5px solid var(--border); padding: 12px 16px; border-radius: 11px; color: #fff; font-size: 1rem; outline: none; width: 100%; transition: all 0.3s; }
+        input:focus, select:focus { border-color: var(--accent); background: rgba(30, 41, 59, 0.8); box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1); }
+        input::placeholder { color: var(--text-xs); }
+        
+        .tt-item { display: flex; align-items: center; padding: 16px; background: rgba(30, 41, 59, 0.4); border-radius: 12px; border: 1px solid var(--border); transition: all 0.3s; }
+        .tt-item:hover { background: rgba(30, 41, 59, 0.6); border-color: var(--accent); }
+        .tt-item.now { background: linear-gradient(135deg, rgba(129, 140, 248, 0.2), rgba(129, 140, 248, 0.1)); border-color: var(--accent); box-shadow: 0 0 12px rgba(129, 140, 248, 0.2); }
+        .tt-perio { color: var(--accent); font-weight: 800; width: 70px; font-size: 0.9rem; }
+        .tt-sub { flex: 1; text-align: center; font-weight: 700; color: #fff; font-size: 1rem; }
+        
         .hidden { display: none !important; }
         .view-section { display: none; }
-        .view-section.active { display: block; }
+        .view-section.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 3000; display: none; justify-content: center; align-items: center; }
+
+        .meal-unit-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(30, 41, 59, 0.2)); border: 1.5px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 18px; transition: all 0.3s; }
+        .meal-unit-card:hover { background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.3)); border-color: var(--accent); }
+        .meal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1.5px solid var(--border); }
+        .meal-title { color: var(--accent-light); font-size: 1rem; font-weight: 800; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px; }
+        .meal-icon { font-size: 1.1rem; }
+        .meal-kcal { color: var(--text-xs); font-size: 0.85rem; font-weight: 600; }
+        .meal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+        .meal-item { background: rgba(129, 140, 248, 0.1); padding: 12px 10px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; border: 1px solid var(--border); text-align: center; display: flex; align-items: center; justify-content: center; min-height: 48px; line-height: 1.3; transition: all 0.2s; color: var(--text-p); }
+        .meal-item:hover { background: rgba(129, 140, 248, 0.2); border-color: var(--accent); }
+
+        .sche-item { padding: 16px; background: rgba(30, 41, 59, 0.4); border-radius: 12px; border: 1.5px solid var(--border); margin-bottom: 12px; display: flex; align-items: center; gap: 14px; transition: all 0.3s; }
+        .sche-item:hover { background: rgba(30, 41, 59, 0.6); border-color: var(--accent); }
+        .sche-item.passed { opacity: 0.5; background: rgba(30, 41, 59, 0.2); }
+        .sche-date { font-size: 0.8rem; color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; min-width: 80px; }
+        .sche-event { font-size: 1rem; font-weight: 700; color: var(--text-p); flex: 1; display: flex; align-items: center; gap: 10px; }
+        .sche-icon { font-size: 1.1rem; }
+
+        /* 학교 제목 영역 */
+        .school-header { margin-bottom: 40px; }
+        .school-title { font-size: 2.8rem; font-weight: 900; margin-bottom: 12px; background: linear-gradient(135deg, #fff, var(--accent-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -1px; }
+        .school-subtitle { font-size: 1.1rem; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; }
+        .school-date { font-size: 0.95rem; color: var(--text-s); font-weight: 600; margin-top: 8px; }
+
+        h2 { font-size: 1.9rem; font-weight: 900; margin-bottom: 28px; letter-spacing: -0.5px; color: var(--text-p); display: flex; align-items: center; gap: 12px; }
+        .section-icon { font-size: 1.6rem; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(129, 140, 248, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(129, 140, 248, 0.5); }
     </style>
 </head>
 <body>
 
     <div id="modal-overlay">
-        <div class="modal-card">
-            <h3 style="margin-bottom: 15px;">전체 삭제</h3>
-            <p style="color: var(--text-s); margin-bottom: 25px; font-size: 0.95rem;">모든 계획을 삭제하시겠습니까?</p>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-impact" style="flex:1; background: rgba(255,255,255,0.05); color:#fff; height:45px;" onclick="closeModal()">취소</button>
-                <button class="btn-impact" style="flex:1; background: var(--danger); color:#fff; height:45px;" onclick="clearAllPlans()">삭제</button>
+        <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.4)); border: 1.5px solid rgba(129, 140, 248, 0.3); padding: 35px; border-radius: 18px; text-align: center; width: 90%; max-width: 350px; backdrop-filter: blur(10px);">
+            <h3 style="margin-bottom: 15px; font-weight: 800; font-size: 1.2rem;">계획 전체 삭제</h3>
+            <p style="color: var(--text-s); margin-bottom: 28px; font-size: 0.95rem;">모든 계획을 삭제하시겠습니까?</p>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn-impact" style="flex:1; background: rgba(129, 140, 248, 0.2); color: var(--accent); box-shadow: none; border: 1px solid var(--accent);" onclick="closeModal()">취소</button>
+                <button class="btn-impact" style="flex:1; background: linear-gradient(135deg, var(--danger), #ff6b6b); color: #fff;" onclick="clearAllPlans()">삭제</button>
             </div>
         </div>
     </div>
 
     <div id="onboard">
-        <div class="setup-box">
-            <div class="setup-header" style="margin-bottom:40px; display:flex; justify-content:center;">
-                <div class="logo-wrapper">
-                    <div class="minimal-logo"><div class="logo-spine"></div></div>
-                    <div class="logo-text">HAK</div> 
+        <div class="onboard-box">
+            <div class="logo-wrapper"><div class="minimal-logo"><div class="logo-spine"></div></div><div class="logo-text">HAK</div></div>
+            <h1 style="font-size: 1.8rem; margin-bottom: 30px; color: var(--accent-light);">학교 정보 입력</h1>
+            <div id="step-1">
+                <div class="search-row">
+                    <input type="text" id="sch-input" placeholder="학교 이름을 입력하세요" onkeyup="handleSearchKeyUp(event)">
+                    <button class="btn-impact" style="width:80px;" onclick="searchSchool()">검색</button>
                 </div>
+                <div id="sch-results"></div>
             </div>
-            <div id="step-1" class="h-group">
-                <input type="text" id="sch-input" placeholder="학교 이름을 입력하세요" onkeyup="handleSearchKeyUp(event)">
-                <button class="btn-impact" onclick="searchSchool()">
-                    <div class="ico-search"></div><span>검색</span>
-                </button>
-            </div>
-            <div id="sch-results"></div>
             <div id="step-2" class="hidden">
-                <div style="margin-bottom: 15px; font-weight: 700; color: var(--accent); text-align: center;" id="selected-school-name">학교 선택 완료</div>
-                <div class="h-group">
-                    <select id="grade" style="flex: 1;"></select>
-                    <input type="number" id="class" value="0" min="0" style="flex: 0.5; text-align: center;">
-                    <button class="btn-impact" onclick="saveConfig()">시작</button>
+                <div id="selected-school-name" style="margin-bottom:25px; font-weight:700; color:var(--accent-light); font-size: 1.2rem;"></div>
+                <div style="display:flex; gap:12px; margin-bottom:20px; flex-direction: column-reverse;">
+                    <select id="class" style="width:100%;"></select>
+                    <select id="grade" onchange="updateClassOptions()"></select>
                 </div>
-                <button onclick="goBackToStep1()" style="width: 100%; background:none; border:none; color:var(--text-s); margin-top:15px; cursor:pointer; font-weight:700;">다른 학교 검색</button>
+                <button class="btn-impact" style="width:100%; margin-bottom:14px;" onclick="saveConfig()">시작하기</button>
+                <button style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:0.9rem; text-decoration:underline; font-weight: 600;" onclick="goBackToStep1()">학교 다시 검색하기</button>
             </div>
         </div>
     </div>
 
     <div id="main-view">
         <nav>
-            <div class="logo-wrapper" style="margin-bottom: 60px; align-items: flex-start; padding-left: 20px;">
-                <div class="minimal-logo" style="transform: scale(0.8); transform-origin: left center;"><div class="logo-spine"></div></div>
-                <div class="logo-text" style="font-size: 0.9rem;">HAK</div> 
+            <div class="logo-wrapper">
+                <div class="minimal-logo"><div class="logo-spine"></div></div>
+                <div class="logo-text">HAK</div> 
             </div>
-            <div class="nav-item active" onclick="switchView('home', this)">플랜</div>
+            <div class="nav-item active" onclick="switchView('home', this)">홈</div>
+            <div class="nav-item" onclick="switchView('plans', this)">계획</div>
+            <div class="nav-item" onclick="switchView('timetable', this)">시간표</div>
             <div class="nav-item" onclick="switchView('meal', this)">급식</div>
             <div class="nav-item" onclick="switchView('schedule', this)">일정</div>
-            <button class="btn-edit-config" onclick="openEditMode()">수정</button>
+            <button class="btn-edit-config" onclick="openEditMode()">⚙️ 수정</button>
         </nav>
 
         <section class="content">
             <div class="container">
-                <span class="location-tag" id="v-location">위치 정보 확인 중...</span>
+                
+                <div class="location-bar" id="location-display"></div>
+                
                 <div class="status-bar">
-                    <div class="mini-card"><h4>온도</h4><p id="v-temp">--°C</p></div>
-                    <div class="mini-card"><h4>습도</h4><p id="v-humi">--%</p></div>
-                    <div class="mini-card"><h4>먼지</h4><p id="v-dust">--</p></div>
-                </div>
-                <div class="progress-container"><div id="progress-bar"></div></div>
-
-                <div id="view-home" class="view-section active">
-                    <h2 id="school-title" style="font-size: 2.3rem; font-weight: 900; margin-bottom: 5px;">--</h2>
-                    <p id="dept-title" style="color: var(--accent); font-size: 1rem; margin-bottom: 12px; font-weight: 800; display: none;">--</p>
-                    <p id="today-date" style="color: var(--text-s); font-weight: 700; margin-bottom: 30px; font-size: 0.9rem;">--</p>
-                    <div class="card">
-                        <div class="h-group" style="margin-bottom: 25px;">
-                            <input type="text" id="plan-input" placeholder="계획 입력" onkeypress="if(event.key==='Enter')addPlan()">
-                            <button class="btn-impact" onclick="addPlan()">추가</button>
+                    <div id="card-temp" class="mini-card temp-cool">
+                        <div class="mini-card-content">
+                            <h4>온도</h4>
+                            <p id="v-temp">--°C</p>
+                            <div class="mini-card-status" id="v-temp-status">확인 중</div>
                         </div>
-                        <div id="plan-list"></div>
-                        <div id="plan-footer" style="display:flex; justify-content:flex-end; gap:10px; margin-top:25px;" class="hidden">
-                            <button class="btn-impact" style="background:rgba(239, 68, 68, 0.1); color:var(--danger);" onclick="openModal()">전체삭제</button>
-                            <button class="btn-impact" style="background:var(--success); color:#fff;" onclick="completeChecked()">완료</button>
+                    </div>
+                    <div id="card-humi" class="mini-card humi-normal">
+                        <div class="mini-card-content">
+                            <h4>습도</h4>
+                            <p id="v-humi">--%</p>
+                            <div class="mini-card-status" id="v-humi-status">확인 중</div>
+                        </div>
+                    </div>
+                    <div id="card-dust" class="mini-card dust-good">
+                        <div class="mini-card-content">
+                            <h4>미세먼지</h4>
+                            <p id="v-dust">--</p>
+                            <div class="mini-card-status" id="v-dust-status">확인 중</div>
                         </div>
                     </div>
                 </div>
-                <div id="view-meal" class="view-section"><div class="card"><div id="meal-list"></div></div></div>
-                <div id="view-schedule" class="view-section"><div class="card"><div id="calendar-list"></div></div></div>
+
+                <div id="view-home" class="view-section active">
+                    <div class="school-header">
+                        <h2 class="school-title" id="school-title">--</h2>
+                        <p id="school-subtitle" class="school-subtitle">--</p>
+                        <p id="today-date" class="school-date">--</p>
+                    </div>
+
+                    <div class="home-grid">
+                        <div class="home-card">
+                            <h5><span class="home-card-icon">✓</span>남은 할 일</h5>
+                            <div class="home-card-value" id="sum-plans">0</div>
+                            <div class="home-card-desc">계획 남은 개수</div>
+                        </div>
+                        <div class="home-card">
+                            <h5><span class="home-card-icon">○</span>현재 수업</h5>
+                            <div class="home-card-value" id="sum-tt">확인 중</div>
+                            <div class="home-card-desc">지금 수강 중인 과목</div>
+                        </div>
+                        <div class="home-card">
+                            <h5><span class="home-card-icon">◒</span>날씨 상태</h5>
+                            <div class="home-card-value" id="weather-index">--</div>
+                            <div class="home-card-desc" id="weather-desc">정보 로딩 중</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-plans" class="view-section">
+                    <h2>나의 계획</h2>
+                    <div class="progress-wrapper"><div id="progress-bar"></div></div>
+                    <div class="card">
+                        <div style="display:flex; gap:12px; margin-bottom: 25px;">
+                            <input type="text" id="plan-input" placeholder="새로운 계획을 입력하세요" onkeypress="if(event.key==='Enter')addPlan()">
+                            <button class="btn-impact" style="width:80px;" onclick="addPlan()">추가</button>
+                        </div>
+                        <div id="plan-list" class="plan-empty">아직 계획이 없습니다</div>
+                        <div id="plan-footer" style="display:flex; justify-content:flex-end; gap:10px; margin-top:25px;" class="hidden">
+                            <button class="btn-impact" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.4), rgba(239, 68, 68, 0.2)); color: var(--danger); box-shadow: none; border: 1px solid var(--danger);" onclick="openModal()">전체 삭제</button>
+                            <button class="btn-impact" style="background: linear-gradient(135deg, var(--success), var(--success-light));" onclick="completeChecked()">완료</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-timetable" class="view-section">
+                    <h2><span class="section-icon">◊</span>시간표</h2>
+                    <div class="card"><div id="timetable-list" style="display:grid; gap:12px;"></div></div>
+                </div>
+
+                <div id="view-meal" class="view-section">
+                    <h2><span class="section-icon">⊕</span>오늘의 급식</h2>
+                    <div id="meal-list"></div>
+                </div>
+                <div id="view-schedule" class="view-section">
+                    <h2><span class="section-icon">□</span>학사 일정</h2>
+                    <div id="calendar-list"></div>
+                </div>
             </div>
         </section>
     </div>
@@ -197,137 +336,540 @@
         let config = JSON.parse(localStorage.getItem('hak_log_v1'));
         let plans = JSON.parse(localStorage.getItem('hak_log_plans_v1')) || [];
         let firstSchoolName = "";
+        let schoolClassInfo = {};
 
         window.onload = () => { if(config) launchApp(); renderPlans(); };
 
-        function openModal() { document.getElementById('modal-overlay').style.display = 'flex'; }
-        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
-        function clearAllPlans() { plans = []; savePlans(); closeModal(); }
-
         async function handleSearchKeyUp(e) {
-            const input = e.target; const q = input.value.trim();
-            if(e.key === 'Enter' && firstSchoolName) { input.value = firstSchoolName; document.getElementById('sch-results').style.display = 'none'; return; }
-            if(q.length < 2) { document.getElementById('sch-results').style.display = 'none'; firstSchoolName = ""; return; }
-            try {
-                const res = await fetch(`${BASE}/schoolInfo?Type=json&SCHUL_NM=${q}&KEY=${KEY}`);
-                const data = await res.json();
-                if(data.schoolInfo) {
-                    const list = data.schoolInfo[1].row; firstSchoolName = list[0].SCHUL_NM;
-                    document.getElementById('sch-results').style.display = 'block';
-                    document.getElementById('sch-results').innerHTML = list.map(s => `<div class="sch-item" onclick="document.getElementById('sch-input').value='${s.SCHUL_NM}'; searchSchool();"><strong>${s.SCHUL_NM}</strong><br><small style="color:var(--text-s)">${s.ORG_RDNMA || ''}</small></div>`).join('');
+            const input = e.target; 
+            const q = input.value.trim();
+            if(e.key === 'Enter') {
+                if(firstSchoolName) {
+                    input.value = firstSchoolName; 
+                    document.getElementById('sch-results').style.display = 'none';
                 }
-            } catch(e) {}
+                return; 
+            }
+            if(q.length < 2) { 
+                document.getElementById('sch-results').style.display = 'none'; 
+                firstSchoolName = ""; 
+                return; 
+            }
+            try {
+                const res = await fetch(`${BASE}/schoolInfo?Type=json&SCHUL_NM=${encodeURIComponent(q)}&KEY=${KEY}`);
+                const data = await res.json();
+                if(data.schoolInfo && data.schoolInfo[1] && data.schoolInfo[1].row) {
+                    const list = Array.isArray(data.schoolInfo[1].row) ? data.schoolInfo[1].row : [data.schoolInfo[1].row];
+                    firstSchoolName = list[0].SCHUL_NM;
+                    document.getElementById('sch-results').style.display = 'block';
+                    document.getElementById('sch-results').innerHTML = list.map(s => `
+                        <div class="sch-item" onclick="document.getElementById('sch-input').value='${s.SCHUL_NM.replace(/'/g, "\\'")}'; searchSchool();">
+                            <strong>${s.SCHUL_NM}</strong>
+                            <div class="sch-addr">${s.ORG_RDNMA || ''}</div>
+                        </div>`).join('');
+                }
+            } catch(e) { console.error("검색 오류:", e); }
         }
 
         async function searchSchool() {
-            const q = document.getElementById('sch-input').value.trim(); if(!q) return;
+            const q = document.getElementById('sch-input').value.trim(); 
+            if(!q) return;
             try {
-                const res = await fetch(`${BASE}/schoolInfo?Type=json&SCHUL_NM=${q}&KEY=${KEY}`);
+                const res = await fetch(`${BASE}/schoolInfo?Type=json&SCHUL_NM=${encodeURIComponent(q)}&KEY=${KEY}`);
                 const data = await res.json();
-                if(data.schoolInfo) {
-                    const s = data.schoolInfo[1].row[0];
-                    window.tempConf = { nm: s.SCHUL_NM, ofc: s.ATPT_OFCDC_SC_CODE, sch: s.SD_SCHUL_CODE };
+                if(data.schoolInfo && data.schoolInfo[1] && data.schoolInfo[1].row) {
+                    const rows = Array.isArray(data.schoolInfo[1].row) ? data.schoolInfo[1].row : [data.schoolInfo[1].row];
+                    const s = rows[0];
+                    window.tempConf = { nm: s.SCHUL_NM, ofc: s.ATPT_OFCDC_SC_CODE, sch: s.SD_SCHUL_CODE, type: s.SCHUL_KND_SC_NM, addr: s.ORG_RDNMA };
                     document.getElementById('selected-school-name').innerText = s.SCHUL_NM;
+                    
+                    await loadSchoolClassInfo(s.ATPT_OFCDC_SC_CODE, s.SD_SCHUL_CODE);
+                    
                     const gradeSelect = document.getElementById('grade');
-                    let maxGrade = s.SCHUL_NM.includes("초등학교") ? 6 : 3;
+                    let maxGrade = s.SCHUL_NM.includes("초등") ? 6 : 3;
                     gradeSelect.innerHTML = "";
                     for(let i=1; i<=maxGrade; i++) {
                         const opt = document.createElement('option');
                         opt.value = i; opt.innerText = i + "학년";
                         gradeSelect.appendChild(opt);
                     }
+                    
+                    updateClassOptions();
+                    
                     document.getElementById('step-1').classList.add('hidden');
                     document.getElementById('sch-results').style.display = 'none';
                     document.getElementById('step-2').classList.remove('hidden');
                 }
-            } catch(e) {}
+            } catch(e) { console.error("학교 검색 오류:", e); }
         }
 
-        function goBackToStep1() {
-            document.getElementById('step-2').classList.add('hidden');
-            document.getElementById('step-1').classList.remove('hidden');
+        async function loadSchoolClassInfo(ofc, sch) {
+            try {
+                const res = await fetch(`${BASE}/classInfo?Type=json&ATPT_OFCDC_SC_CODE=${ofc}&SD_SCHUL_CODE=${sch}&KEY=${KEY}`);
+                const data = await res.json();
+                schoolClassInfo = {};
+                if(data.classInfo && data.classInfo[1] && data.classInfo[1].row) {
+                    const rows = Array.isArray(data.classInfo[1].row) ? data.classInfo[1].row : [data.classInfo[1].row];
+                    
+                    const uniqueClasses = {};
+                    rows.forEach(row => {
+                        const key = row.GRADE + "_" + row.CLASS_NM;
+                        if(!uniqueClasses[key]) {
+                            uniqueClasses[key] = row;
+                        }
+                    });
+                    
+                    for(let key in uniqueClasses) {
+                        const row = uniqueClasses[key];
+                        if(!schoolClassInfo[row.GRADE]) {
+                            schoolClassInfo[row.GRADE] = [];
+                        }
+                        schoolClassInfo[row.GRADE].push({
+                            cls: row.CLASS_NM,
+                            dept: row.DDDEP_NM || "일반"
+                        });
+                    }
+                    
+                    for(let grade in schoolClassInfo) {
+                        schoolClassInfo[grade].sort((a, b) => parseInt(a.cls) - parseInt(b.cls));
+                    }
+                }
+            } catch(e) { console.error("반 정보 조회 오류:", e); }
+        }
+
+        function updateClassOptions() {
+            const grade = document.getElementById('grade').value;
+            const classSelect = document.getElementById('class');
+            classSelect.innerHTML = "";
+            
+            if(schoolClassInfo[grade]) {
+                schoolClassInfo[grade].forEach((item, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = item.cls;
+                    opt.innerText = (idx + 1) + "반" + (item.dept ? ` (${item.dept})` : "");
+                    classSelect.appendChild(opt);
+                });
+                classSelect.value = schoolClassInfo[grade][0].cls;
+            }
+        }
+
+        function goBackToStep1() { 
+            document.getElementById('step-2').classList.add('hidden'); 
+            document.getElementById('step-1').classList.remove('hidden'); 
             document.getElementById('sch-input').value = "";
         }
 
-        function saveConfig() {
-            config = { ...window.tempConf, grade: document.getElementById('grade').value, cls: document.getElementById('class').value };
-            localStorage.setItem('hak_log_v1', JSON.stringify(config)); location.reload(); 
+        function saveConfig() { 
+            const clsVal = document.getElementById('class').value;
+            config = { ...window.tempConf, grade: document.getElementById('grade').value, cls: clsVal }; 
+            localStorage.setItem('hak_log_v1', JSON.stringify(config)); 
+            location.reload(); 
         }
 
-        function launchApp() { document.getElementById('onboard').classList.add('hidden'); document.getElementById('main-view').style.opacity = '1'; loadData(); }
-        function openEditMode() { localStorage.removeItem('hak_log_v1'); location.reload(); }
-        function switchView(id, el) {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('view-' + id).classList.add('active'); el.classList.add('active');
+        function launchApp() { 
+            document.getElementById('onboard').style.display = 'none'; 
+            document.getElementById('main-view').style.opacity = '1'; 
+            loadData(); 
+        }
+        
+        function openEditMode() { 
+            localStorage.removeItem('hak_log_v1'); 
+            location.reload(); 
         }
 
-        function addPlan() {
-            const input = document.getElementById('plan-input'); if(!input.value.trim()) return;
-            plans.push({ text: input.value, done: false, checked: false }); input.value = ''; savePlans();
+        function getTempClass(temp) {
+            if(temp <= 0) return 'temp-very-cold';
+            if(temp <= 10) return 'temp-cold';
+            if(temp <= 20) return 'temp-cool';
+            if(temp <= 28) return 'temp-warm';
+            if(temp <= 35) return 'temp-hot';
+            return 'temp-very-hot';
         }
-        function toggleCheck(i) { plans[i].checked = !plans[i].checked; savePlans(); }
-        function completeChecked() { plans.forEach(p => { if(p.checked) { p.done = true; p.checked = false; } }); savePlans(); }
-        function savePlans() { localStorage.setItem('hak_log_plans_v1', JSON.stringify(plans)); renderPlans(); }
-        function renderPlans() {
-            const list = document.getElementById('plan-list'); const footer = document.getElementById('plan-footer'); const bar = document.getElementById('progress-bar');
-            if(plans.length === 0) { list.innerHTML = ''; footer.classList.add('hidden'); bar.style.width = '0%'; return; }
-            footer.classList.remove('hidden');
-            list.innerHTML = plans.map((p, i) => `<div class="plan-item"><input type="checkbox" ${p.done ? 'disabled' : (p.checked ? 'checked' : '')} onchange="toggleCheck(${i})"><input type="text" class="plan-text ${p.done ? 'completed' : ''}" value="${p.text}" readonly><button class="btn-del" onclick="plans.splice(${i},1);savePlans();">X</button></div>`).join('');
-            bar.style.width = (plans.filter(p => p.done).length / plans.length * 100) + '%';
+
+        function getHumiClass(humi) {
+            if(humi < 20) return 'humi-very-dry';
+            if(humi < 35) return 'humi-dry';
+            if(humi <= 65) return 'humi-normal';
+            if(humi <= 80) return 'humi-wet';
+            return 'humi-very-wet';
+        }
+
+        function getDustClass(dust) {
+            if(dust <= 15) return 'dust-very-good';
+            if(dust <= 35) return 'dust-good';
+            if(dust <= 75) return 'dust-normal';
+            if(dust <= 150) return 'dust-bad';
+            return 'dust-very-bad';
+        }
+
+        function getTempStatus(temp) {
+            if(temp <= 0) return '매우 추움';
+            if(temp <= 10) return '추움';
+            if(temp <= 20) return '쌀쌀함';
+            if(temp <= 28) return '따뜻함';
+            if(temp <= 35) return '더움';
+            return '매우 더움';
+        }
+
+        function getHumiStatus(humi) {
+            if(humi < 20) return '매우 건조';
+            if(humi < 35) return '건조';
+            if(humi <= 65) return '적정';
+            if(humi <= 80) return '습함';
+            return '매우 습함';
+        }
+
+        function getDustStatus(dust) {
+            if(dust <= 15) return '매우 좋음';
+            if(dust <= 35) return '좋음';
+            if(dust <= 75) return '보통';
+            if(dust <= 150) return '나쁨';
+            return '매우 나쁨';
+        }
+
+        function getWeatherStatus(temp, humi, dust) {
+            let tempScore = 0;
+            let humiScore = 0;
+            let dustScore = 0;
+
+            if(temp >= 18 && temp <= 26) tempScore = 25;
+            else if(temp >= 15 && temp <= 30) tempScore = 20;
+            else if(temp >= 10 && temp <= 35) tempScore = 15;
+            else if(temp >= 5 && temp <= 40) tempScore = 10;
+            else tempScore = 0;
+
+            if(humi >= 40 && humi <= 60) humiScore = 25;
+            else if(humi >= 30 && humi <= 70) humiScore = 20;
+            else if(humi >= 20 && humi <= 80) humiScore = 15;
+            else if(humi >= 10 && humi <= 90) humiScore = 10;
+            else humiScore = 0;
+
+            if(dust <= 15) dustScore = 25;
+            else if(dust <= 35) dustScore = 20;
+            else if(dust <= 75) dustScore = 15;
+            else if(dust <= 150) dustScore = 5;
+            else dustScore = 0;
+
+            const totalScore = tempScore + humiScore + dustScore;
+
+            if(totalScore >= 70) return { text: '쾌적', status: '온도, 습도, 미세먼지 모두 최적' };
+            else if(totalScore >= 55) return { text: '좋음', status: '대부분 좋은 날씨' };
+            else if(totalScore >= 40) return { text: '보통', status: '주의가 필요한 날씨' };
+            else if(totalScore >= 25) return { text: '나쁨', status: '외출 시 주의 필요' };
+            else return { text: '최악', status: '외출 권장 안 함' };
+        }
+
+        const koreaLocationDB = {
+            '서울': { lat: 37.5665, lon: 126.9780, name: '서울' },
+            '강남': { lat: 37.4979, lon: 127.0276, name: '강남' },
+            '강북': { lat: 37.6450, lon: 127.0275, name: '강북' },
+            '강서': { lat: 37.5510, lon: 126.8249, name: '강서' },
+            '동작': { lat: 37.4850, lon: 126.9426, name: '동작' },
+            '부산': { lat: 35.1796, lon: 129.0756, name: '부산' },
+            '대구': { lat: 35.8716, lon: 128.5944, name: '대구' },
+            '인천': { lat: 37.4563, lon: 126.7052, name: '인천' },
+            '광주': { lat: 35.1595, lon: 126.8526, name: '광주' },
+            '대전': { lat: 36.3504, lon: 127.3845, name: '대전' },
+            '울산': { lat: 35.5384, lon: 129.3114, name: '울산' },
+            '경기': { lat: 37.2756, lon: 127.0093, name: '경기' },
+            '강원': { lat: 37.2431, lon: 127.0780, name: '강원' },
+            '충청북': { lat: 36.6362, lon: 127.4912, name: '충청북' },
+            '충청남': { lat: 36.8182, lon: 127.1089, name: '충청남' },
+            '전라북': { lat: 35.7175, lon: 127.1536, name: '전라북' },
+            '전라남': { lat: 34.8160, lon: 126.4635, name: '전라남' },
+            '경상북': { lat: 36.5760, lon: 128.5056, name: '경상북' },
+            '경상남': { lat: 35.2383, lon: 128.6929, name: '경상남' },
+            '제주': { lat: 33.4996, lon: 126.5312, name: '제주' }
+        };
+
+        function parseAddressToLocation(addr) {
+            const keywords = ['강남', '강북', '강서', '강동', '송파', '서초', '마포', '서대문', '중구', '동대문', '종로', '중랑', '성동', '광진', '노원', '도봉', '동작', '영등포', '금천', '구로', '양천', '은평'];
+            
+            for(let keyword of keywords) {
+                if(addr.includes(keyword)) {
+                    if(koreaLocationDB[keyword]) return koreaLocationDB[keyword];
+                }
+            }
+
+            const siDo = addr.split(' ')[0];
+            if(koreaLocationDB[siDo]) return koreaLocationDB[siDo];
+
+            return koreaLocationDB['서울'];
+        }
+
+        async function getWeatherBySchool() {
+            try {
+                if(!config || !config.addr) return;
+                
+                const location = parseAddressToLocation(config.addr);
+                document.getElementById('location-display').innerText = location.name + ' 기준';
+                
+                const weatherRes = await fetch(
+                    `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,relative_humidity_2m,pm10,pm2_5&timezone=Asia/Seoul`
+                );
+                const weatherData = await weatherRes.json();
+                
+                if(!weatherData.current) {
+                    console.error("날씨 데이터 없음");
+                    return;
+                }
+                
+                const tempVal = Math.round(weatherData.current.temperature_2m);
+                const humiVal = Math.round(weatherData.current.relative_humidity_2m);
+                let dustVal = Math.round(weatherData.current.pm10 || 0);
+                
+                document.getElementById('v-temp').innerText = tempVal + "°C";
+                document.getElementById('v-temp-status').innerText = getTempStatus(tempVal);
+                document.getElementById('card-temp').className = 'mini-card ' + getTempClass(tempVal);
+
+                document.getElementById('v-humi').innerText = humiVal + "%";
+                document.getElementById('v-humi-status').innerText = getHumiStatus(humiVal);
+                document.getElementById('card-humi').className = 'mini-card ' + getHumiClass(humiVal);
+
+                document.getElementById('v-dust').innerText = getDustStatus(dustVal);
+                document.getElementById('v-dust-status').innerText = '현재 상태';
+                document.getElementById('card-dust').className = 'mini-card ' + getDustClass(dustVal);
+
+                const weatherStatus = getWeatherStatus(tempVal, humiVal, dustVal);
+                document.getElementById('weather-index').innerText = weatherStatus.text;
+                document.getElementById('weather-desc').innerText = weatherStatus.status;
+
+            } catch(e) {
+                console.error("날씨 조회 실패:", e);
+            }
+        }
+
+        function getCurrentPeriod(timetable) {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMin = now.getMinutes();
+            
+            const periods = {
+                1: { start: 8, end: 9 },
+                2: { start: 9, end: 10 },
+                3: { start: 10, end: 11 },
+                4: { start: 11, end: 12 },
+                5: { start: 12, end: 13 },
+                6: { start: 13, end: 14 },
+                7: { start: 14, end: 15 },
+                8: { start: 15, end: 16 },
+            };
+
+            for(const [perio, time] of Object.entries(periods)) {
+                if((currentHour > time.start || (currentHour === time.start && currentMin >= 0)) && 
+                   (currentHour < time.end || (currentHour === time.end && currentMin < 0))) {
+                    const tt = timetable.filter(t => parseInt(t.PERIO) === parseInt(perio));
+                    if(tt.length > 0) {
+                        const names = tt.map(t => t.ITRT_CNTNT.replace(/\([^)]*\)/g, "").replace(/\*/g, "").trim()).join(' / ');
+                        return { perio: String(perio), name: names };
+                    }
+                }
+            }
+            return { perio: null, name: "수업 없음" };
         }
 
         async function loadData() {
             document.getElementById('school-title').innerText = config.nm;
-            const deptEl = document.getElementById('dept-title');
-            const now = new Date(); const todayStr = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
-            document.getElementById('today-date').innerText = `${now.getMonth()+1}월 ${now.getDate()}일`;
+            
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const todayStr = year + String(month).padStart(2, '0') + String(day).padStart(2, '0');
+            document.getElementById('today-date').innerText = `${month}월 ${day}일`;
 
             try {
-                const cRes = await fetch(`${BASE}/classInfo?Type=json&ATPT_OFCDC_SC_CODE=${config.ofc}&SD_SCHUL_CODE=${config.sch}&GRADE=${config.grade}&KEY=${KEY}`);
-                const cData = await cRes.json();
-                if(cData.classInfo) {
-                    const myClass = cData.classInfo[1].row.find(r => r.CLASS_NM == config.cls);
-                    if(myClass && myClass.DDDEP_NM && myClass.DDDEP_NM !== '해당없음') {
-                        deptEl.innerText = myClass.DDDEP_NM; deptEl.style.display = 'block';
-                    }
+                const classRes = await fetch(`${BASE}/classInfo?Type=json&ATPT_OFCDC_SC_CODE=${config.ofc}&SD_SCHUL_CODE=${config.sch}&GRADE=${config.grade}&CLASS_NM=${config.cls}&KEY=${KEY}`);
+                const classData = await classRes.json();
+                if(classData.classInfo && classData.classInfo[1] && classData.classInfo[1].row) {
+                    const classRow = Array.isArray(classData.classInfo[1].row) ? classData.classInfo[1].row[0] : classData.classInfo[1].row;
+                    const className = classRow.CLASS_NM || '';
+                    const department = classRow.DDDEP_NM || '';
+                    document.getElementById('school-subtitle').innerText = department ? `${className}반 (${department})` : `${className}반`;
                 }
-            } catch(e) {}
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const { latitude: lat, longitude: lon } = pos.coords;
-                    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,pm10`).then(r=>r.json()).then(d=>{
-                        document.getElementById('v-temp').innerText = Math.round(d.current.temperature_2m) + "°C";
-                        document.getElementById('v-humi').innerText = d.current.relative_humidity_2m + "%";
-                        const pm10 = d.current.pm10 || 0;
-                        document.getElementById('v-dust').innerText = pm10 <= 30 ? "좋음" : pm10 <= 80 ? "보통" : "나쁨";
-                    });
-                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`).then(r=>r.json()).then(d=>{
-                        document.getElementById('v-location').innerText = d.address.city || d.address.town || '내 지역';
-                    });
-                });
+            } catch(e) { 
+                document.getElementById('school-subtitle').innerText = `${config.grade}학년 ${config.cls}반`;
             }
 
+            await getWeatherBySchool();
+
+            let ttType = config.type === "중학교" ? "misTimetable" : (config.type === "고등학교" ? "hisTimetable" : "elsTimetable");
+            
+            try {
+                const classParam = String(config.cls);
+                const ttUrl = `${BASE}/${ttType}?Type=json&ATPT_OFCDC_SC_CODE=${config.ofc}&SD_SCHUL_CODE=${config.sch}&GRADE=${config.grade}&CLASS_NM=${classParam}&TI_FROM_YMD=${todayStr}&TI_TO_YMD=${todayStr}&KEY=${KEY}`;
+                
+                const ttRes = await fetch(ttUrl);
+                const ttData = await ttRes.json();
+                
+                if(ttData[ttType] && ttData[ttType][1] && ttData[ttType][1].row) {
+                    const rows = Array.isArray(ttData[ttType][1].row) ? ttData[ttType][1].row : [ttData[ttType][1].row];
+                    
+                    const timetableByPeriod = {};
+                    rows.forEach(row => {
+                        const perio = String(row.PERIO);
+                        if(!timetableByPeriod[perio]) {
+                            timetableByPeriod[perio] = [];
+                        }
+                        timetableByPeriod[perio].push(row);
+                    });
+
+                    const sortedPeriods = Object.keys(timetableByPeriod).sort((a, b) => parseInt(a) - parseInt(b));
+                    const currentPeriod = getCurrentPeriod(rows);
+                    
+                    document.getElementById('timetable-list').innerHTML = sortedPeriods.map(perio => {
+                        const subjects = timetableByPeriod[perio];
+                        const isCurrent = currentPeriod.perio === String(perio) && currentPeriod.perio !== null;
+                        
+                        const subNames = subjects.map(s => s.ITRT_CNTNT.replace(/\([^)]*\)/g, "").replace(/\*/g, "").trim()).join(' / ');
+                        
+                        return `<div class="tt-item ${isCurrent ? 'now' : ''}">
+                            <span class="tt-perio">${perio}교시</span>
+                            <span class="tt-sub">${subNames || "자습"}</span>
+                        </div>`;
+                    }).join('');
+                    
+                    document.getElementById('sum-tt').innerText = currentPeriod.name;
+                } else {
+                    document.getElementById('timetable-list').innerHTML = `<div style="text-align:center; color:var(--text-s); padding:20px;">시간표 정보를 찾을 수 없습니다.</div>`;
+                    document.getElementById('sum-tt').innerText = "정보 없음";
+                }
+            } catch(e) {
+                console.error("시간표 조회 오류:", e);
+                document.getElementById('timetable-list').innerHTML = `<div style="text-align:center; color:var(--text-s); padding:20px;">시간표를 불러올 수 없습니다.</div>`;
+                document.getElementById('sum-tt').innerText = "오류 발생";
+            }
+
+            // 급식 조회
             try {
                 const mRes = await fetch(`${BASE}/mealServiceDietInfo?Type=json&ATPT_OFCDC_SC_CODE=${config.ofc}&SD_SCHUL_CODE=${config.sch}&MLSV_YMD=${todayStr}&KEY=${KEY}`);
                 const mData = await mRes.json();
-                if(mData.mealServiceDietInfo) {
-                    document.getElementById('meal-list').innerHTML = mData.mealServiceDietInfo[1].row.map(r => `
-                        <div style="margin-bottom:30px;">
-                            <h3 style="color:var(--accent); margin-bottom:12px; font-size:1.1rem;">${r.MMEAL_SC_NM}</h3>
-                            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:10px;">
-                                ${r.DDISH_NM.split('<br/>').map(f => `<div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:12px; text-align:center; font-size:0.85rem; border:1px solid var(--border);">${f.replace(/\([^)]*\)/g, "").trim()}</div>`).join('')}
-                            </div>
-                        </div>`).join('');
+                if(mData.mealServiceDietInfo && mData.mealServiceDietInfo[1] && mData.mealServiceDietInfo[1].row) {
+                    const rList = Array.isArray(mData.mealServiceDietInfo[1].row) ? mData.mealServiceDietInfo[1].row : [mData.mealServiceDietInfo[1].row];
+                    
+                    document.getElementById('meal-list').innerHTML = rList.map(r => {
+                        const mealTypeIcons = {
+                            '아침': '⊕',
+                            '중식': '◎',
+                            '석식': '○'
+                        };
+                        const icon = mealTypeIcons[r.MMEAL_SC_NM] || '⊕';
+                        return `
+                        <div class="meal-unit-card">
+                            <div class="meal-header"><span class="meal-title"><span class="meal-icon">${icon}</span>${r.MMEAL_SC_NM}</span><span class="meal-kcal">${r.CAL_INFO || ''}</span></div>
+                            <div class="meal-grid">${r.DDISH_NM.split('<br/>').map(f => {
+                                const clean = f.replace(/\([^)]*\)/g, "").replace(/\*/g, "").trim();
+                                return clean ? `<div class="meal-item">${clean}</div>` : '';
+                            }).join('')}</div>
+                        </div>`;
+                    }).join('');
+                } else {
+                    document.getElementById('meal-list').innerHTML = `<div style="text-align:center; color:var(--text-s); padding:20px;">급식 정보가 없습니다.</div>`;
                 }
-                const sRes = await fetch(`${BASE}/SchoolSchedule?Type=json&ATPT_OFCDC_SC_CODE=${config.ofc}&SD_SCHUL_CODE=${config.sch}&AA_YMD=${todayStr.substring(0,6)}&KEY=${KEY}`);
-                const sData = await sRes.json();
-                if(sData.SchoolSchedule) {
-                    const filtered = sData.SchoolSchedule[1].row.filter(s => s.AA_YMD >= todayStr && !s.EVENT_NM.includes("휴업일"));
-                    document.getElementById('calendar-list').innerHTML = filtered.map(s => `<div class="time-card"><div class="date-box"><div>${s.AA_YMD.substring(4,6)}월</div><strong>${s.AA_YMD.substring(6,8)}</strong></div><div style="font-weight:700; font-size:0.95rem;">${s.EVENT_NM}</div></div>`).join('');
+            } catch(e) {
+                document.getElementById('meal-list').innerHTML = `<div style="text-align:center; color:var(--text-s); padding:20px;">급식을 불러올 수 없습니다.</div>`;
+            }
+
+            // 학사일정 조회
+            try {
+                const lastDay = new Date(year, month, 0).getDate();
+                const endStr = year + String(month).padStart(2, '0') + String(lastDay).padStart(2, '0');
+                const scheRes = await fetch(`${BASE}/SchoolSchedule?Type=json&ATPT_OFCDC_SC_CODE=${config.ofc}&SD_SCHUL_CODE=${config.sch}&AA_FROM_YMD=${year}${String(month).padStart(2, '0')}01&AA_TO_YMD=${endStr}&KEY=${KEY}`);
+                const scheData = await scheRes.json();
+                if(scheData.SchoolSchedule && scheData.SchoolSchedule[1] && scheData.SchoolSchedule[1].row) {
+                    const rows = Array.isArray(scheData.SchoolSchedule[1].row) ? scheData.SchoolSchedule[1].row : [scheData.SchoolSchedule[1].row];
+                    
+                    const filtered = rows.filter(r => {
+                        if(r.EVENT_NM.includes("토요휴업일")) return false;
+                        const eventDate = r.AA_YMD;
+                        return eventDate >= todayStr;
+                    });
+                    
+                    document.getElementById('calendar-list').innerHTML = filtered.length > 0 
+                        ? filtered.map(r => `
+                            <div class="sche-item">
+                                <span class="sche-date">${r.AA_YMD.substring(4,6)}.${r.AA_YMD.substring(6,8)}</span>
+                                <span class="sche-event"><span class="sche-icon">▪</span>${r.EVENT_NM}</span>
+                            </div>`).join('')
+                        : `<div style="text-align:center; color:var(--text-s); padding:30px;">앞으로 예정된 학사일정이 없습니다</div>`;
                 }
-            } catch(e) {}
+            } catch(e) {
+                document.getElementById('calendar-list').innerHTML = `<div style="text-align:center; color:var(--text-s); padding:20px;">학사일정을 불러올 수 없습니다.</div>`;
+            }
+        }
+
+        function addPlan() { 
+            const i = document.getElementById('plan-input'); 
+            if(!i.value.trim()) return; 
+            plans.push({ text: i.value, done: false, checked: false }); 
+            i.value = ''; 
+            savePlans(); 
+        }
+        
+        function toggleCheck(idx) { 
+            if(idx >= 0 && idx < plans.length) {
+                plans[idx].checked = !plans[idx].checked; 
+                savePlans(); 
+            }
+        }
+        
+        function completeChecked() { 
+            plans.forEach(p => { if(p.checked) p.done = true; p.checked = false; }); 
+            savePlans(); 
+        }
+        
+        function clearAllPlans() { 
+            plans = []; 
+            savePlans(); 
+            closeModal(); 
+        }
+        
+        function savePlans() { 
+            localStorage.setItem('hak_log_plans_v1', JSON.stringify(plans)); 
+            renderPlans(); 
+        }
+        
+        function openModal() { 
+            document.getElementById('modal-overlay').style.display = 'flex'; 
+        }
+        
+        function closeModal() { 
+            document.getElementById('modal-overlay').style.display = 'none'; 
+        }
+        
+        function renderPlans() {
+            const list = document.getElementById('plan-list');
+            
+            if (plans.length === 0) {
+                list.innerHTML = '';
+                list.className = 'plan-empty';
+                list.innerText = '아직 계획이 없습니다';
+                document.getElementById('progress-bar').style.width = "0%";
+                document.getElementById('sum-plans').innerText = "0";
+                document.getElementById('plan-footer').classList.add('hidden');
+                return;
+            }
+
+            list.className = '';
+            list.innerHTML = plans.map((p, i) => `
+                <div class="plan-item">
+                    <input type="checkbox" class="plan-check" ${p.done ? 'disabled checked' : (p.checked ? 'checked' : '')} onchange="toggleCheck(${i})">
+                    <div class="plan-text ${p.done ? 'completed' : ''}">${p.text}</div>
+                    <button class="btn-del" onclick="plans.splice(${i},1);savePlans();">×</button>
+                </div>`).join('');
+
+            const doneCount = plans.filter(p => p.done).length;
+            const progress = (doneCount / plans.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + "%";
+            document.getElementById('plan-footer').className = plans.some(p => p.checked) ? "" : "hidden";
+            document.getElementById('sum-plans').innerText = plans.filter(p => !p.done).length;
+        }
+
+        function switchView(id, el) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('view-' + id).classList.add('active'); 
+            el.classList.add('active');
         }
     </script>
 </body>
